@@ -32,13 +32,13 @@
 /* 버튼 디자인 */
 .ep-actions button { 
     background: none; 
-    border: 1px solid #eee; 
+    /*border: 1px solid #eee;*/ 
     border-radius: 4px;
     padding: 4px 8px;
     margin-left: 0.5rem; 
     color: var(--text-light); 
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1rem;
 }
 .ep-actions button:hover { color: var(--primary-color); border-color: var(--primary-color); }
 
