@@ -156,7 +156,7 @@ function readEpisode(id, fromPreview = false) {
 // 관리자 로그인 체크
 function checkLogin() {
     const pw = document.getElementById('admin-pw').value;
-    if (pw === 'cjfalsdldi1!') {
+    if (pw === '1234') {
         sessionStorage.setItem('isAdmin', 'true');
         document.getElementById('admin-pw').value = '';
         navigate('admin-dashboard');
