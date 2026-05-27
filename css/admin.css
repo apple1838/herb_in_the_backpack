@@ -10,12 +10,37 @@
 .admin-form textarea#ep-summary { height: 100px; resize: vertical; }
 .admin-form textarea#ep-content { height: 300px; resize: vertical; }
 
-/* 등록된 회차 관리 목록 */
-.admin-ep-list { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
-.admin-ep-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color); background: white; }
+/* 등록된 회차 관리 목록 (Grid 레이아웃 적용) */
+.admin-ep-list { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; background: white; }
+
+.admin-ep-item { 
+    display: grid; 
+    grid-template-columns: 1fr auto; /* 왼쪽은 제목/조회수, 오른쪽은 날짜/버튼 */
+    grid-template-rows: auto auto;   /* 위아래 2행 */
+    gap: 5px 15px; 
+    padding: 1rem; 
+    border-bottom: 1px solid var(--border-color); 
+}
 .admin-ep-item:last-child { border-bottom: none; }
-.admin-actions button { background: none; border: none; font-size: 1.2rem; margin-left: 0.5rem; color: var(--text-light); cursor: pointer;}
-.admin-actions button:hover { color: var(--primary-color); }
+
+/* 4분할 영역 위치 지정 */
+.ep-title   { grid-column: 1; grid-row: 1; font-weight: bold; }
+.ep-views   { grid-column: 1; grid-row: 2; font-size: 0.85rem; color: var(--text-light); }
+.ep-date    { grid-column: 2; grid-row: 1; font-size: 0.85rem; color: var(--text-light); text-align: right; }
+.ep-actions { grid-column: 2; grid-row: 2; display: flex; justify-content: flex-end; align-items: center; }
+
+/* 버튼 디자인 */
+.ep-actions button { 
+    background: none; 
+    border: 1px solid #eee; 
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-left: 0.5rem; 
+    color: var(--text-light); 
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.ep-actions button:hover { color: var(--primary-color); border-color: var(--primary-color); }
 
 /* 조회 통계 레이아웃 */
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; }
