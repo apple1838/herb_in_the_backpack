@@ -32,7 +32,7 @@
 /* 버튼 디자인 */
 .ep-actions button { 
     background: none; 
-    /*border: 1px solid #eee;*/ 
+    border: 0;
     border-radius: 4px;
     padding: 4px 8px;
     margin-left: 0.5rem; 
