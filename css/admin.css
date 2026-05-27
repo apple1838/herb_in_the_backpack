@@ -25,12 +25,13 @@
 
 /* 4분할 레이아웃 배치 */
 .ep-title   { grid-column: 1; grid-row: 1; font-weight: bold; }
-.ep-views   { grid-column: 1; grid-row: 2; font-size: 0.85rem; color: var(--text-light); }
-.ep-date    { grid-column: 2; grid-row: 1; font-size: 0.85rem; color: var(--text-light); text-align: right; }
+.ep-views   { grid-column: 1; grid-row: 2; font-size: 0.7rem; color: var(--text-light); }
+.ep-date    { grid-column: 2; grid-row: 1; font-size: 0.7rem; color: var(--text-light); text-align: right; }
 .ep-actions { grid-column: 2; grid-row: 2; display: flex; justify-content: flex-end; align-items: center; }
 
 /* 버튼 디자인 */
 .ep-actions button { 
+    background: none;
     cursor: pointer;
     font-size: 1rem;
 }
