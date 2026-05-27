@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>허브 인 더 백팩</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v3.2.1/dist/web/static/pretendard.css" />
+    <style>
+        /* 기본 설정 및 변수 */
+        :root {
+            --primary-color: #9b89b3;
+            --primary-dark: #7a6b8f;
+            --bg-color: #fcfcfc;
+            --text-color: #333;
+            --text-light: #666;
+            --border-color: #eaeaea;
+            --dark-bg: #1a1a24;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-color); line-height: 1.6; }
+        
+        a, button, .clickable { cursor: pointer; text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* 네비게이션 헤더 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo a {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover { color: var(--primary-color); }
+
+        .menu-toggle { display: none; font-size: 1.5rem; background: none; border: none; color: var(--text-color); }
+        
+        /* 페이지 컨테이너 */
+        .page { display: none; min-height: calc(100vh - 140px); }
+        .page.active { display: block; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 3rem 1rem; }
+
+        /* 메인 페이지 (히어로 섹션) */
+        .hero {
+            background-color: var(--dark-bg);
+            color: white;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .hero h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem;}
+        .hero h1 { font-size: 3rem; font-weight: 300; }
+        
+        /* 1화 미리보기 섹션 설정 */
+        .preview-section { max-width: 800px; margin: 3rem auto; padding: 2rem; border-top: 1px solid var(--border-color); text-align: center; }
+        .preview-text-box {
+            position: relative;
+            max-height: 770px;
+            overflow: hidden;
+            text-align: center; 
+            margin: 2rem 0;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            white-space: pre-wrap; 
+        }
+        .preview-text-box::after {
+            content: "";
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 150px;
+            background: linear-gradient(transparent, var(--bg-color));
+            pointer-events: none;
+        }
+        .read-more-text {
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .read-more-text:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* 에피소드 페이지 공통 뷰 컨트롤 */
+        .view-controls { display: flex; justify-content: flex-end; margin-bottom: 1rem; gap: 0.5rem; }
+        .view-controls button { padding: 0.5rem 1rem; border: 1px solid var(--border-color); background: white; border-radius: 4px; transition: 0.2s; }
+        .view-controls button.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        
+        /* 그리드 뷰 (갤러리 뷰) */
+        .episode-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 2rem; 
+        }
+        .episode-grid .episode-card {
+            border: 1px solid var(--border-color); border-radius: 8px; padding: 2.5rem 2rem;
+            background: white; transition: transform 0.2s, box-shadow 0.2s;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .episode-grid .episode-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+        .episode-grid .ep-title { margin-bottom: 1rem; font-size: 1.3rem; font-weight: 700; color: var(--primary-dark); }
+        .episode-grid .ep-summary { color: var(--text-color); font-size: 1rem; margin-bottom: 2rem; line-height: 1.7; flex-grow: 1; word-break: keep-all; }
+        .episode-grid .ep-date { font-size: 0.9rem; color: var(--text-light); border-top: 1px dashed var(--border-color); padding-top: 1.2rem; text-align: right; }
+
+        /* 리스트 뷰 */
+        .episode-list { 
+            display: flex; 
+            flex-direction: column; 
+            border-top: 2px solid var(--text-color); 
+        }
+        .episode-list .episode-card {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 1rem 0.5rem; 
+            border-bottom: 1px solid var(--border-color);
+            background: transparent; 
+            transition: background-color 0.2s;
+        }
+        .episode-list .episode-card:hover { background-color: rgba(155, 137, 179, 0.05); } 
+        .episode-list .ep-title { margin-bottom: 0; font-size: 1rem; font-weight: 500; flex-grow: 1; text-align: left; }
+        .episode-list .ep-summary { display: none; } 
+        .episode-list .ep-date { font-size: 0.9rem; color: var(--text-light); padding-left: 1rem; white-space: nowrap; }
+
+        /* 글 읽기 페이지 */
+        .read-header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color); }
+        .read-content { font-size: 1.1rem; line-height: 1.8; white-space: pre-wrap; margin-bottom: 4rem; }
+        .read-actions { display: flex; justify-content: center; gap: 1rem; }
+        
+        /* 공통 버튼 스타일 */
+        .btn { padding: 0.8rem 2rem; border: none; border-radius: 4px; background: var(--primary-color); color: white; font-size: 1rem; font-weight: 500; cursor: pointer;}
+        .btn-outline { background: white; color: var(--primary-color); border: 1px solid var(--primary-color); }
+
+        /* 작가에게 페이지 */
+        .contact-box {
+            max-width: 400px; margin: 0 auto; padding: 3rem 2rem;
+            border: 1px solid var(--border-color); border-radius: 12px;
+            background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.03); text-align: center;
+        }
+        .contact-item { margin: 1.5rem 0; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .contact-item i { font-size: 2rem; color: var(--primary-color); }
+
+        /* 관리자 로그인 & 대시보드 */
+        .admin-login-box { max-width: 400px; margin: 5rem auto; text-align: center; }
+        .admin-login-box input { width: 100%; padding: 1rem; margin: 1rem 0; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit;}
+        .admin-login-box button { width: 100%; }
+
+        .admin-section { background: white; padding: 2rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .admin-form input, .admin-form textarea { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; }
+        
+        .admin-form textarea#ep-summary { height: 100px; resize: vertical; }
+        .admin-form textarea#ep-content { height: 300px; resize: vertical; }
+        
+        .admin-ep-list { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+        .admin-ep-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color); background: white; }
+        .admin-ep-item:last-child { border-bottom: none; }
+        .admin-actions button { background: none; border: none; font-size: 1.2rem; margin-left: 0.5rem; color: var(--text-light); cursor: pointer;}
+        .admin-actions button:hover { color: var(--primary-color); }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; }
+        .stat-card { padding: 2rem; border: 1px solid var(--border-color); border-radius: 8px; background: #fafafa; }
+        .stat-card h3 { font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem; }
+        .stat-card p { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); }
+
+        footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border-color); color: var(--text-light); font-size: 0.9rem; }
+
+        /* PC, 모바일 반응형 */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                display: none; flex-direction: column; width: 100%; position: absolute;
+                top: 100%; left: 0; background: white; padding: 1rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            .nav-links.show { display: flex; align-items: center; }
+            .nav-links li { margin: 1rem 0; }
+            .hero h1 { font-size: 2rem; }
+            .episode-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <a href="#" onclick="navigate('home')"><i class="fa-solid fa-house"></i></a> 
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#" onclick="navigate('episode')">에피소드</a></li>
+            <li><a href="#" onclick="navigate('world')">세계관 및 캐릭터</a></li>
+            <li><a href="#" onclick="navigate('contact')">작가에게</a></li>
+            <li><a href="#" onclick="navigate('admin-login')"><i class="fa-solid fa-gear"></i></a></li>
+        </ul>
+    </header>
+
+    <main id="app">
+        <section id="page-home" class="page active">
+            <div class="hero">
+                <h2>HERB IN THE BACKPACK</h2>
+                <h1>허브 인 더 백팩</h1>
+            </div>
+            <div class="preview-section" id="first-preview">
+                </div>
+        </section>
+
+        <section id="page-episode" class="page">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h2>에피소드</h2>
+                    <p style="color: var(--text-light);">연재 중인 이야기들을 만나보세요.</p>
+                </div>
+                <div class="view-controls">
+                    <button id="btn-grid" class="active" onclick="setViewMode('grid')"><i class="fa-solid fa-border-all"></i> 갤러리</button>
+                    <button id="btn-list" onclick="setViewMode('list')"><i class="fa-solid fa-list"></i> 리스트</button>
+                </div>
+                <div id="episode-container" class="episode-grid">
+                    </div>
+            </div>
+        </section>
+
+        <section id="page-read" class="page">
+            <div class="container">
+                <div class="read-header">
+                    <h2 id="read-title">제목</h2>
+                    <span class="ep-date" id="read-date" style="color: var(--text-light); margin-top:1rem; display:block;">날짜</span>
+                </div>
+                <div class="read-content" id="read-content">
+                    내용
+                </div>
+                <div class="read-actions">
+                    <button class="btn btn-outline" onclick="navigate('episode')">목록으로</button>
+                    <button class="btn" id="btn-next-ep" style="display: none;">다음화</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-world" class="page">
+            <div class="container" style="text-align: center;">
+                <h2 style="margin-bottom: 2rem;">세계관 및 캐릭터</h2>
+                <div id="world-content"></div> 
+            </div>
+        </section>
+
+        <section id="page-contact" class="page">
+            <div class="container">
+                <div class="contact-box">
+                    <h2>작가에게</h2>
+                    <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 0.9rem;">작품에 대한 문의나 감상을 남겨주세요.</p>
+                    <div class="contact-item">
+                        <i class="fa-regular fa-envelope"></i>
+                        <span>mini_1022@naver.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>010-2249-9245</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-admin-login" class="page">
+            <div class="container">
+                <div class="admin-login-box">
+                    <i class="fa-solid fa-lock" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                    <h2>관리자 로그인</h2>
+                    <p style="color: var(--text-light); font-size: 0.9rem;">이 페이지는 관리자 전용입니다.</p>
+                    <input type="password" id="admin-pw" placeholder="비밀번호를 입력하세요" onkeypress="if(event.key === 'Enter') checkLogin()">
+                    <button class="btn" onclick="checkLogin()">로그인</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-admin-dashboard" class="page">
+            <div class="container">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2>관리자 페이지</h2>
+                    <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.85rem;" onclick="logout()">로그아웃</button>
+                </div>
+
+                <div class="admin-section">
+                    <h3 style="margin-bottom: 1rem;" id="upload-title">회차 업로드</h3>
+                    <div class="admin-form">
+                        <input type="hidden" id="edit-id" value="">
+                        <input type="text" id="ep-title" placeholder="회차 제목 (예: 낯선 약초학자)">
+                        <textarea id="ep-summary" placeholder="회차에 대한 짧은 소개글이나 요약을 적어주세요. (에피소드 갤러리 뷰에 노출됩니다)"></textarea>
+                        <textarea id="ep-content" placeholder="본문 내용을 입력하세요..."></textarea>
+                        <button class="btn" style="width: 100%; padding: 0.6rem 2rem;" onclick="saveEpisode()" id="btn-save">업로드</button>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h3 style="margin-bottom: 1rem;">등록된 회차</h3>
+                    <div class="admin-ep-list" id="admin-ep-list">
+                        </div>
+                </div>
+
+                <div class="admin-section">
+                    <h3 style="margin-bottom: 1rem;">조회 통계</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>총 조회수</h3>
+                            <p id="stat-views">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>등록 회차</h3>
+                            <p id="stat-count">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>최다 조회</h3>
+                            <p id="stat-max">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        &copy; 2026 나만의 웹페이지 만들기.
+    </footer>
+
+    <script>
+        let episodes = JSON.parse(localStorage.getItem('herb_episodes')) || [
+            { id: 1, title: '첫 번째 밤', summary: '어둠이 내린 하늘은 맑았다...', content: '약초 냄새가 짙게 밴 오래된 가방을 열자, 희미한 빛이 새어나왔다...\n\n(이곳에 관리자 페이지를 통해 1화의 본문을 아주 길게 작성해 보세요. 약 30줄 정도가 넘어가면 아래쪽이 자연스럽게 흐려지면서 숨겨지도록 설계되었습니다.)\n\n낡은 가죽의 촉감과 바스락거리는 마른 잎사귀들의 소리가 공방의 고요함을 갈랐다...', date: '2023.10.01', visible: true, views: 15 },
+            { id: 2, title: '낯선 방문자', summary: '문을 열자 그곳에는 뜻밖의 인물이...', content: '연금술 공방의 문을 두드린 것은 제국에서 온 사절단이었다...', date: '2023.10.08', visible: true, views: 32 },
+            { id: 3, title: '은밀한 약속', summary: '우리는 결코 잊어서는 안 되는...', content: '푸른빛이 감도는 만드라고라 뿌리를 건네며 그는 속삭였다...', date: '2023.10.15', visible: true, views: 10 }
+        ];
+
+        episodes = episodes.map(ep => {
+            ep.title = ep.title.replace(/^\d+화[\s.]*/, '').trim();
+            return ep;
+        });
+
+        let currentViewMode = 'grid'; 
+        let currentReadingId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            saveData(); 
+            renderEpisodes();
+            renderAdminEpisodes();
+            updateStats();
+            renderFirstPreview(); 
+        });
+
+        // 변경사항: 스크롤 스킵 옵션을 추가하여 부드러운 스크롤 인터랙션과 충돌 방지
+        function navigate(pageId, skipScroll = false) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            
+            if (pageId === 'admin-login') {
+                if (sessionStorage.getItem('isAdmin') === 'true') {
+                    document.getElementById('page-admin-dashboard').classList.add('active');
+                } else {
+                    document.getElementById('page-admin-login').classList.add('active');
+                }
+            } else {
+                document.getElementById(`page-${pageId}`).classList.add('active');
+            }
+            
+            document.getElementById('nav-links').classList.remove('show');
+            if (!skipScroll) {
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function toggleMenu() {
+            document.getElementById('nav-links').classList.toggle('show');
+        }
+
+        function saveData() {
+            localStorage.setItem('herb_episodes', JSON.stringify(episodes));
+            updateStats();
+            renderFirstPreview(); 
+        }
+
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            document.getElementById('btn-grid').classList.toggle('active', mode === 'grid');
+            document.getElementById('btn-list').classList.toggle('active', mode === 'list');
+            renderEpisodes();
+        }
+
+        function renderEpisodes() {
+            const container = document.getElementById('episode-container');
+            container.className = currentViewMode === 'grid' ? 'episode-grid' : 'episode-list';
+            container.innerHTML = '';
+
+            const visibleEpisodes = episodes.filter(ep => ep.visible);
+
+            if (visibleEpisodes.length === 0) {
+                container.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:#999;">아직 등록된 회차가 없습니다.</p>';
+                return;
+            }
+
+            visibleEpisodes.forEach(ep => {
+                const div = document.createElement('div');
+                div.className = 'episode-card clickable';
+                div.onclick = () => readEpisode(ep.id);
+                div.innerHTML = `
+                    <h3 class="ep-title">${ep.id}화. ${ep.title}</h3>
+                    <p class="ep-summary">${ep.summary}</p>
+                    <span class="ep-date">${ep.date}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderFirstPreview() {
+            const previewSection = document.getElementById('first-preview');
+            const firstEp = episodes.find(ep => ep.id === 1) || episodes[0];
+            
+            if (firstEp && firstEp.visible) {
+                // 변경사항: 타이틀 폰트 크기 축소(1.1rem) 및 연한 그레이 색상 밸런스 설정, 회차 제목 노출 삭제
+                previewSection.innerHTML = `
+                    <h2 style="font-size: 1.1rem; color: var(--text-light); letter-spacing: 0.15em; margin-bottom: 2rem; font-weight: 600;">1화 미리보기</h2>
+                    <div class="preview-text-box">${firstEp.content}</div>
+                    <a class="clickable read-more-text" onclick="readEpisode(${firstEp.id}, true)">
+                        1화 이어서 읽기 &rarr;
+                    </a>
+                `;
+            } else {
+                previewSection.innerHTML = '<p style="color: var(--text-light);">미리보기 내용이 없습니다.</p>';
+            }
+        }
+
+        // 변경사항: fromPreview 플래그가 들어오면 30줄 위치를 계산해 정밀 자동 스크롤 수행
+        function readEpisode(id, fromPreview = false) {
+            const ep = episodes.find(e => e.id === id);
+            if (!ep) return;
+            
+            ep.views = (ep.views || 0) + 1;
+            saveData();
+            
+            document.getElementById('read-title').innerText = `${ep.id}화. ${ep.title}`;
+            document.getElementById('read-date').innerText = ep.date;
+            document.getElementById('read-content').innerText = ep.content;
+            
+            currentReadingId = id;
+            
+            const visibleEpisodes = episodes.filter(e => e.visible);
+            const currentIndex = visibleEpisodes.findIndex(e => e.id === id);
+            const nextBtn = document.getElementById('btn-next-ep');
+            
+            if (currentIndex !== -1 && currentIndex < visibleEpisodes.length - 1) {
+                const nextId = visibleEpisodes[currentIndex + 1].id;
+                nextBtn.style.display = 'inline-block';
+                nextBtn.onclick = () => readEpisode(nextId);
+            } else {
+                nextBtn.style.display = 'none';
+            }
+
+            // 스크롤 상단 고정 방지 옵션을 켠 상태로 이동
+            navigate('read', fromPreview);
+
+            if (fromPreview) {
+                setTimeout(() => {
+                    const readContent = document.getElementById('read-content');
+                    // 글 읽기 창의 현재 폰트 크기와 line-height(1.8)를 고려해 정확한 30줄 높이 계산
+                    const fontSize = parseFloat(window.getComputedStyle(readContent).fontSize) || 17.6;
+                    const lineHeight = 1.8;
+                    const offsetHeight = 30 * fontSize * lineHeight;
+                    
+                    // 상단 고정 메뉴바(약 70px) + 안전 여백을 고려한 타겟 스크롤 좌표 생성
+                    const targetPosition = readContent.offsetTop + offsetHeight - 90;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }, 50);
+            }
+        }
+
+        function checkLogin() {
+            const pw = document.getElementById('admin-pw').value;
+            if (pw === 'cjfalsdldi1!') {
+                sessionStorage.setItem('isAdmin', 'true');
+                document.getElementById('admin-pw').value = '';
+                navigate('admin-dashboard');
+                renderAdminEpisodes();
+            } else {
+                alert('비밀번호가 일치하지 않습니다.');
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('isAdmin');
+            navigate('home');
+        }
+
+        function renderAdminEpisodes() {
+            const list = document.getElementById('admin-ep-list');
+            list.innerHTML = '';
+            
+            episodes.forEach(ep => {
+                const div = document.createElement('div');
+                div.className = 'admin-ep-item';
+                div.innerHTML = `
+                    <div>
+                        <span style="font-weight:bold; margin-right: 1rem; color: ${ep.visible ? '#333' : '#ccc'}">${ep.id}화. ${ep.title}</span>
+                        <span style="font-size:0.8rem; color:#999;">${ep.date} / 조회수: ${ep.views || 0}</span>
+                    </div>
+                    <div class="admin-actions">
+                        <button title="공개/비공개 전환" onclick="toggleVisibility(${ep.id})">
+                            <i class="fa-regular ${ep.visible ? 'fa-eye' : 'fa-eye-slash'}"></i>
+                        </button>
+                        <button title="수정" onclick="editEpisode(${ep.id})">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button title="삭제" onclick="deleteEpisode(${ep.id})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function toggleVisibility(id) {
+            const ep = episodes.find(e => e.id === id);
+            if (ep) {
+                ep.visible = !ep.visible;
+                saveData();
+                renderAdminEpisodes();
+                renderEpisodes();
+            }
+        }
+
+        function deleteEpisode(id) {
+            if (confirm('정말로 이 회차를 삭제하시겠습니까?')) {
+                episodes = episodes.filter(e => e.id !== id);
+                saveData(); 
+                renderAdminEpisodes();
+                renderEpisodes();
+            }
+        }
+
+        function editEpisode(id) {
+            const ep = episodes.find(e => e.id === id);
+            if (ep) {
+                document.getElementById('edit-id').value = ep.id;
+                document.getElementById('ep-title').value = ep.title;
+                document.getElementById('ep-summary').value = ep.summary;
+                document.getElementById('ep-content').value = ep.content;
+                
+                document.getElementById('upload-title').innerText = '회차 수정';
+                document.getElementById('btn-save').innerText = '수정 완료';
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function saveEpisode() {
+            const editId = document.getElementById('edit-id').value;
+            let title = document.getElementById('ep-title').value.trim();
+            title = title.replace(/^\d+화[\s.]*/, '').trim();
+            
+            const summary = document.getElementById('ep-summary').value.trim();
+            const content = document.getElementById('ep-content').value.trim();
+            
+            if (!title || !content) {
+                alert('제목과 내용을 모두 입력해주세요.');
+                return;
+            }
+
+            if (editId) {
+                const ep = episodes.find(e => e.id === parseInt(editId));
+                ep.title = title;
+                ep.summary = summary;
+                ep.content = content;
+            } else {
+                const newId = episodes.length > 0 ? Math.max(...episodes.map(e => e.id)) + 1 : 1;
+                const today = new Date();
+                const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
+                
+                episodes.push({
+                    id: newId,
+                    title: title,
+                    summary: summary,
+                    content: content,
+                    date: dateStr,
+                    visible: true,
+                    views: 0
+                });
+            }
+
+            saveData();
+            renderAdminEpisodes();
+            renderEpisodes();
+            
+            document.getElementById('edit-id').value = '';
+            document.getElementById('ep-title').value = '';
+            document.getElementById('ep-summary').value = '';
+            document.getElementById('ep-content').value = '';
+            document.getElementById('upload-title').innerText = '회차 업로드';
+            document.getElementById('btn-save').innerText = '업로드';
+            
+            alert('저장되었습니다.');
+        }
+
+        function updateStats() {
+            const totalViews = episodes.reduce((sum, ep) => sum + (ep.views || 0), 0);
+            const count = episodes.length;
+            
+            let maxTitle = '-';
+            if (count > 0) {
+                const maxEp = episodes.reduce((prev, current) => (prev.views > current.views) ? prev : current);
+                if (maxEp.views > 0) {
+                    maxTitle = `${maxEp.id}화. ${maxEp.title}`;
+                }
+            }
+
+            document.getElementById('stat-views').innerText = totalViews;
+            document.getElementById('stat-count').innerText = `${count}화`;
+            document.getElementById('stat-max').innerText = maxTitle;
+        }
+    </script>
+</body>
+</html>
