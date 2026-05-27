@@ -1,0 +1,29 @@
+/* 관리자 로그인 */
+.admin-login-box { max-width: 400px; margin: 5rem auto; text-align: center; }
+.admin-login-box input { width: 100%; padding: 1rem; margin: 1rem 0; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit;}
+.admin-login-box button { width: 100%; }
+
+/* 관리자 레이아웃 및 폼 */
+.admin-section { background: white; padding: 2rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 2rem; }
+.admin-form input, .admin-form textarea { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; }
+
+.admin-form textarea#ep-summary { height: 100px; resize: vertical; }
+.admin-form textarea#ep-content { height: 300px; resize: vertical; }
+
+/* 등록된 회차 관리 목록 */
+.admin-ep-list { border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+.admin-ep-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color); background: white; }
+.admin-ep-item:last-child { border-bottom: none; }
+.admin-actions button { background: none; border: none; font-size: 1.2rem; margin-left: 0.5rem; color: var(--text-light); cursor: pointer;}
+.admin-actions button:hover { color: var(--primary-color); }
+
+/* 조회 통계 레이아웃 */
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; }
+.stat-card { padding: 2rem; border: 1px solid var(--border-color); border-radius: 8px; background: #fafafa; }
+.stat-card h3 { font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem; }
+.stat-card p { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); }
+
+/* 모바일 통계 반응형 */
+@media (max-width: 768px) {
+    .stats-grid { grid-template-columns: 1fr; }
+}
