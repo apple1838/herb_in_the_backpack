@@ -172,7 +172,7 @@ function logout() {
     navigate('home');
 }
 
-// 관리자 화면 내 등록된 회차 목록 출력
+// 관리자 화면 내 등록된 회차 목록 출력 (수정된 코드)
 function renderAdminEpisodes() {
     const list = document.getElementById('admin-ep-list');
     if (!list) return;
@@ -181,12 +181,13 @@ function renderAdminEpisodes() {
     episodes.forEach(ep => {
         const div = document.createElement('div');
         div.className = 'admin-ep-item';
+        
+        // CSS Grid와 연결되는 클래스 구조로 변경
         div.innerHTML = `
-            <div>
-                <span style="font-weight:bold; margin-right: 1rem; color: ${ep.visible ? '#333' : '#ccc'}">${ep.id}화. ${ep.title}</span>
-                <span style="font-size:0.8rem; color:#999;">${ep.date} / 조회수: ${ep.views || 0}</span>
-            </div>
-            <div class="admin-actions">
+            <div class="ep-title">${ep.id}화. ${ep.title}</div>
+            <div class="ep-views">조회수: ${ep.views || 0}</div>
+            <div class="ep-date">${ep.date}</div>
+            <div class="ep-actions">
                 <button title="공개/비공개 전환" onclick="toggleVisibility(${ep.id})">
                     <i class="fa-regular ${ep.visible ? 'fa-eye' : 'fa-eye-slash'}"></i>
                 </button>
@@ -201,7 +202,6 @@ function renderAdminEpisodes() {
         list.appendChild(div);
     });
 }
-
 // 공개 여부 변경 토글
 function toggleVisibility(id) {
     const ep = episodes.find(e => e.id === id);
