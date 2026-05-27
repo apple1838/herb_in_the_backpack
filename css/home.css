@@ -13,7 +13,13 @@
 .hero h1 { font-size: 3rem; font-weight: 300; }
 
 /* 1화 미리보기 섹션 */
-.preview-section { max-width: 800px; margin: 3rem auto; padding: 2rem; border-top: 1px solid var(--border-color); text-align: center; }
+.preview-section { 
+    max-width: 800px; 
+    margin: 3rem auto; 
+    padding: 2rem; 
+    border-top: 1px solid var(--border-color); 
+    text-align: center; 
+}
 .preview-text-box {
     position: relative;
     max-height: 770px;
