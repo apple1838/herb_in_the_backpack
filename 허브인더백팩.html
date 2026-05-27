@@ -153,9 +153,6 @@
     <script>
         // 초기 가상 데이터 설정 (Local Storage에 데이터가 없을 때만 작동)
         let episodes = JSON.parse(localStorage.getItem('herb_episodes')) || [
-            { id: 1, title: '첫 번째 밤', summary: '어둠이 내린 하늘은 맑았다...', content: '약초 냄새가 짙게 밴 오래된 가방을 열자, 희미한 빛이 새어나왔다...\n\n(이곳에 관리자 페이지를 통해 1화의 본문을 아주 길게 작성해 보세요. 약 30줄 정도가 넘어가면 아래쪽이 자연스럽게 흐려지면서 숨겨지도록 설계되었습니다.)\n\n낡은 가죽의 촉감과 바스락거리는 마른 잎사귀들의 소리가 공방의 고요함을 갈랐다...', date: '2023.10.01', visible: true, views: 15 },
-            { id: 2, title: '낯선 방문자', summary: '문을 열자 그곳에는 뜻밖의 인물이...', content: '연금술 공방의 문을 두드린 것은 제국에서 온 사절단이었다...', date: '2023.10.08', visible: true, views: 32 },
-            { id: 3, title: '은밀한 약속', summary: '우리는 결코 잊어서는 안 되는...', content: '푸른빛이 감도는 만드라고라 뿌리를 건네며 그는 속삭였다...', date: '2023.10.15', visible: true, views: 10 }
         ];
 
         // 제목 포맷팅 수정 (중복 제거)
