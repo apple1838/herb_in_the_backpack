@@ -1,0 +1,51 @@
+/* 메인 타이틀 (히어로 섹션) */
+.hero {
+    background-color: var(--dark-bg);
+    color: white;
+    height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.hero h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem;}
+.hero h1 { font-size: 3rem; font-weight: 300; }
+
+/* 1화 미리보기 섹션 */
+.preview-section { max-width: 800px; margin: 3rem auto; padding: 2rem; border-top: 1px solid var(--border-color); text-align: center; }
+.preview-text-box {
+    position: relative;
+    max-height: 770px;
+    overflow: hidden;
+    text-align: center; 
+    margin: 2rem 0;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    white-space: pre-wrap; 
+}
+.preview-text-box::after {
+    content: "";
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 150px;
+    background: linear-gradient(transparent, var(--bg-color));
+    pointer-events: none;
+}
+.read-more-text {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    transition: color 0.2s;
+}
+.read-more-text:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2rem; }
+}
