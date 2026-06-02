@@ -16,9 +16,10 @@
 }
 
 .hero-test {
+    position: relative
     text-align: center;
     align-items: center;
-    display: flex;
+    display: inline-block;
     flex-direction: column;
     justify-content: center;
     padding: 2rem 4rem;
