@@ -31,14 +31,21 @@
     position: absolute;
     inset: 0;
 
+    top: -10px;
+    bottom: -10px;
+    left: -20px;
+    right: -20px;
+
+    border-radius: 999px;
+    
     background: radial-gradient(
         ellipse at center,
-        rgba(0, 0, 0, 0.55) 0%,
-        rgba(0, 0, 0, 0.35) 50%,
+        rgba(0, 0, 0, 0.45) 0%,
+        rgba(0, 0, 0, 0.25) 50%,
         rgba(0, 0, 0, 0) 100%
     );
 
-    transform: scale(1.8);
+     filter: blur(20px);
     z-index: -1;
 }
 
