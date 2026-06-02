@@ -4,4 +4,70 @@
     text-align: left;
     line-height: 1.8;
 }
+
+.character-section {
+    width: 100%;
+    padding: 4rem 2rem;
+}
+
+.character-card {
+    display: flex;
+    gap: 3rem;
+
+    max-width: 1100px;
+    margin: 4rem auto;
+
+    padding: 2rem;
+
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+.character-image {
+    flex-shrink: 0;
+}
+
+.character-image img {
+    width: 300px;
+    height: 450px;
+    object-fit: cover;
+
+    border-radius: 16px;
+}
+
+.character-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.character-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.character-title {
+    color: #c4a36b;
+    margin-bottom: 1.5rem;
+}
+
+.character-traits {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.character-traits span {
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.character-description {
+    line-height: 1.8;
+}
 /* 나중에 일러스트나 설정집 카드 등을 추가하실 때 이 파일에 스타일을 채워 넣으시면 편리합니다! */
