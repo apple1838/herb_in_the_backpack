@@ -24,8 +24,25 @@
     padding: 2rem 4rem;
     z-index:1;
 }
-.hero-text h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem; transform: translateY(-80px);}
-.hero-text h1 { font-size: 3rem; font-weight: 300; transform: translateY(-80px);}
+
+.hero-text::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(0, 0, 0, 0.35) 50%,
+        rgba(0, 0, 0, 0) 100%
+    );
+
+    transform: scale(1.8);
+    z-index: -1;
+}
+
+.hero-text h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem; }
+.hero-text h1 { font-size: 3rem; font-weight: 300; }
 
 /* 1화 미리보기 섹션 */
 .preview-section { 
