@@ -26,31 +26,15 @@
     z-index:1;
 }
 
-.hero-text::before {
-    content: "";
-    position: absolute;
-    inset: 0;
 
-    top: -10px;
-    bottom: -10px;
-    left: -20px;
-    right: -20px;
 
-    border-radius: 999px;
-    
-    background: radial-gradient(
-        ellipse at center,
-        rgba(0, 0, 0, 0.45) 0%,
-        rgba(0, 0, 0, 0.25) 50%,
-        rgba(0, 0, 0, 0) 100%
-    );
-
-     filter: blur(20px);
-    z-index: -1;
-}
-
-.hero-text h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem; }
-.hero-text h1 { font-size: 3rem; font-weight: 300; }
+.hero-text h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem; text-shadow:
+        0 0 10px rgba(0,0,0,0.9),
+        0 0 25px rgba(0,0,0,0.8),
+        0 0 50px rgba(0,0,0,0.5);}
+.hero-text h1 { font-size: 3rem; font-weight: 300; text-shadow:
+        0 0 8px rgba(0,0,0,0.8),
+        0 0 20px rgba(0,0,0,0.6);}
 
 /* 1화 미리보기 섹션 */
 .preview-section { 
