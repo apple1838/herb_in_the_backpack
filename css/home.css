@@ -14,8 +14,18 @@
     background-position: center;
     background-repeat: no-repeat;
 }
-.hero h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem; transform: translateY(-80px);}
-.hero h1 { font-size: 3rem; font-weight: 300; transform: translateY(-80px);}
+
+.hero-test {
+    text-align: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem 4rem;
+    z-index:1;
+}
+.hero-text h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem; transform: translateY(-80px);}
+.hero-text h1 { font-size: 3rem; font-weight: 300; transform: translateY(-80px);}
 
 /* 1화 미리보기 섹션 */
 .preview-section { 
