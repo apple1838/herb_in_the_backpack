@@ -14,8 +14,8 @@
     background-position: center;
     background-repeat: no-repeat;
 }
-.hero h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem;}
-.hero h1 { font-size: 3rem; font-weight: 300; }
+.hero h2 { font-size: 1rem; letter-spacing: 0.3em; color: var(--primary-color); margin-bottom: 1rem; transform: translateY(-80px);}
+.hero h1 { font-size: 3rem; font-weight: 300; transform: translateY(-80px);}
 
 /* 1화 미리보기 섹션 */
 .preview-section { 
