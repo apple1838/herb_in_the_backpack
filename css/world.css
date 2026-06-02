@@ -61,8 +61,24 @@
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&display=swap');
-.character-traits span {
+.character-traits:last-child {
     padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.08);
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+.character-traits:nth-child(2) {
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.08);
+    font-family: 'Nanum Myeongjo', serif;
+}
+
+.character-traits:first-child {
+    padding: 0.5rem 0.2rem 0.5rem 0;
     border-radius: 999px;
 
     background: rgba(255, 255, 255, 0.08);
