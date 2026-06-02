@@ -24,6 +24,8 @@
     justify-content: center;
     padding: 2rem 4rem;
     z-index:1;
+
+    transform: translateY(-50px);
 }
 
 
