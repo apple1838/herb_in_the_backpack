@@ -62,7 +62,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500&display=swap');
 .character-traits span {
-    padding: 0.4rem 1rem;
+    padding: 0.2rem 0.5rem;
     border-radius: 999px;
 
     background: rgba(255, 255, 255, 0.08);
