@@ -15,11 +15,9 @@ let currentViewMode = 'grid';
 let currentReadingId = null;
 
 // 페이지 시작 시 렌더링
+// 페이지 시작 시
 document.addEventListener('DOMContentLoaded', () => {
-    const hash = location.hash.replace('#', '');
-    const initialPage = hash || 'home';
-
-    navigate(initialPage, true, false);
+    navigate('home', true);
 
     saveData();
     renderEpisodes();
@@ -27,36 +25,32 @@ document.addEventListener('DOMContentLoaded', () => {
     updateStats();
     renderFirstPreview();
 });
-
-window.addEventListener('popstate', (event) => {
-    const pageId = event.state?.page || 'home';
-    navigate(pageId, true, false);
-});
-
 // SPA 탭 화면 전환 함수
-function navigate(pageId, skipScroll = false, push = true) {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+function navigate(pageId, skipScroll = false) {
+    // 1. 전체 페이지 비활성화
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
 
+    // 2. 페이지 선택
     if (pageId === 'admin-login') {
-        if (sessionStorage.getItem('isAdmin') === 'true') {
-            document.getElementById('page-admin-dashboard').classList.add('active');
-        } else {
-            document.getElementById('page-admin-login').classList.add('active');
-        }
+        const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+
+        document
+            .getElementById(isAdmin ? 'page-admin-dashboard' : 'page-admin-login')
+            ?.classList.add('active');
     } else {
-        document.getElementById(`page-${pageId}`).classList.add('active');
+        const target = document.getElementById(`page-${pageId}`);
+        if (target) target.classList.add('active');
     }
 
-    document.getElementById('nav-links').classList.remove('show');
+    // 3. 모바일 메뉴 닫기
+    const nav = document.getElementById('nav-links');
+    if (nav) nav.classList.remove('show');
 
+    // 4. 스크롤
     if (!skipScroll) window.scrollTo(0, 0);
-
-    // ✅ 히스토리 추가
-    if (push) {
-        history.pushState({ page: pageId }, '', `#${pageId}`);
-    }
 }
-
 // 모바일 토글 메뉴
 function toggleMenu() {
     document.getElementById('nav-links').classList.toggle('show');
