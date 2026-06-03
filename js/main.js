@@ -16,13 +16,8 @@ let currentReadingId = null;
 
 // 페이지 시작 시 렌더링
 document.addEventListener('DOMContentLoaded', () => {
-    const hash = location.hash.replace('#', '');
-    const initialPage = hash || 'home';
-
-    // 초기 상태는 replaceState로 넣어야 안정적
-    history.replaceState({ page: initialPage }, '', `#${initialPage}`);
-
-    navigate(initialPage, true, false);
+    const initialPage = location.hash.replace('#', '') || 'home';
+    navigate(initialPage, true);
 
     saveData();
     renderEpisodes();
@@ -31,13 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFirstPreview();
 });
 
-window.addEventListener('popstate', (event) => {
-    const pageId = event.state?.page || 'home';
-    navigate(pageId, true, false);
-});
-
 // SPA 탭 화면 전환 함수
-function navigate(pageId, skipScroll = false, push = true) {
+function navigate(pageId, skipScroll = false) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
 
     if (pageId === 'admin-login') {
@@ -54,10 +44,7 @@ function navigate(pageId, skipScroll = false, push = true) {
 
     if (!skipScroll) window.scrollTo(0, 0);
 
-    // 핵심: replaceState / pushState 구분
-    if (push) {
-        history.pushState({ page: pageId }, '', `#${pageId}`);
-    }
+    location.hash = pageId; // 핵심
 }
 // 모바일 토글 메뉴
 function toggleMenu() {
