@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     renderFirstPreview();
 });
 
+window.addEventListener('hashchange', () => {
+    const pageId = location.hash.replace('#', '') || 'home';
+    navigate(pageId, true);
+});
+
 // SPA 탭 화면 전환 함수
 function navigate(pageId, skipScroll = false) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
