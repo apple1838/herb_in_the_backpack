@@ -201,24 +201,6 @@ function renderAdminEpisodes(page = 1) {
         const div = document.createElement('div');
         div.className = 'admin-ep-item';
 
-        div.innerHTML = `
-    <div class="ep-actions">
-        <button onclick="toggleVisibility(${ep.id})">
-            <i class="fa-regular ${ep.visible ? 'fa-eye' : 'fa-eye-slash'}"></i>
-        </button>
-
-        <button onclick="editEpisode(${ep.id})">
-            <i class="fa-solid fa-pen-to-square"></i>
-        </button>
-
-        <button onclick="deleteEpisode(${ep.id})">
-            <i class="fa-solid fa-trash"></i>
-        </button>
-    </div>
-`;
-        list.appendChild(div);
-    });
-
     const div = document.createElement('div');
     div.className = 'admin-ep-item';
 
