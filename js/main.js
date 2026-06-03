@@ -202,15 +202,20 @@ function renderAdminEpisodes(page = 1) {
         div.className = 'admin-ep-item';
 
         div.innerHTML = `
-            <div class="ep-title">${ep.id}화. ${ep.title}</div>
-            <div class="ep-views">조회수: ${ep.views || 0}</div>
-            <div class="ep-date">${ep.date}</div>
-            <div class="ep-actions">
-                <button onclick="toggleVisibility(${ep.id})">👁</button>
-                <button onclick="editEpisode(${ep.id})">✏️</button>
-                <button onclick="deleteEpisode(${ep.id})">🗑</button>
-            </div>
-        `;
+    <div class="ep-actions">
+        <button onclick="toggleVisibility(${ep.id})">
+            <i class="fa-regular ${ep.visible ? 'fa-eye' : 'fa-eye-slash'}"></i>
+        </button>
+
+        <button onclick="editEpisode(${ep.id})">
+            <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+
+        <button onclick="deleteEpisode(${ep.id})">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    </div>
+`;
         list.appendChild(div);
     });
 
