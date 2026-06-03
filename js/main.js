@@ -186,23 +186,6 @@ function logout() {
     navigate('home');
 }
 
-function renderAdminPagination() {
-    const container = document.getElementById('admin-pagination');
-    if (!container) return;
-
-    const itemsPerPage = 10;
-    const totalPages = Math.ceil(episodes.length / itemsPerPage);
-
-    container.innerHTML = '';
-
-    for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.innerText = i;
-        btn.onclick = () => renderAdminEpisodes(i);
-        container.appendChild(btn);
-    }
-}
-
 // 관리자 화면 내 등록된 회차 목록 출력 (수정된 코드)
 function renderAdminEpisodes(page = 1) {
     const list = document.getElementById('admin-ep-list');
@@ -261,8 +244,7 @@ function renderAdminEpisodes(page = 1) {
     `;
 
     list.appendChild(div);
-});
-    renderAdminPagination();
+})
 }
 // 공개 여부 변경 토글
 function toggleVisibility(id) {
