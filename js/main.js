@@ -16,17 +16,27 @@ let currentReadingId = null;
 
 // 페이지 시작 시 렌더링
 document.addEventListener('DOMContentLoaded', () => {
-    saveData(); 
+    const hash = location.hash.replace('#', '');
+    const initialPage = hash || 'home';
+
+    navigate(initialPage, true, false);
+
+    saveData();
     renderEpisodes();
     renderAdminEpisodes();
     updateStats();
-    renderFirstPreview(); 
+    renderFirstPreview();
+});
+
+window.addEventListener('popstate', (event) => {
+    const pageId = event.state?.page || 'home';
+    navigate(pageId, true, false);
 });
 
 // SPA 탭 화면 전환 함수
-function navigate(pageId, skipScroll = false) {
+function navigate(pageId, skipScroll = false, push = true) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    
+
     if (pageId === 'admin-login') {
         if (sessionStorage.getItem('isAdmin') === 'true') {
             document.getElementById('page-admin-dashboard').classList.add('active');
@@ -36,10 +46,14 @@ function navigate(pageId, skipScroll = false) {
     } else {
         document.getElementById(`page-${pageId}`).classList.add('active');
     }
-    
+
     document.getElementById('nav-links').classList.remove('show');
-    if (!skipScroll) {
-        window.scrollTo(0, 0);
+
+    if (!skipScroll) window.scrollTo(0, 0);
+
+    // ✅ 히스토리 추가
+    if (push) {
+        history.pushState({ page: pageId }, '', `#${pageId}`);
     }
 }
 
