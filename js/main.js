@@ -16,15 +16,25 @@ let currentReadingId = null;
 
 // 페이지 시작 시 렌더링
 document.addEventListener('DOMContentLoaded', () => {
-    saveData(); 
+    const hash = location.hash.replace('#', '');
+    const initialPage = hash || 'home';
+
+    navigate(initialPage, true, false);
+
+    saveData();
     renderEpisodes();
     renderAdminEpisodes();
     updateStats();
-    renderFirstPreview(); 
+    renderFirstPreview();
+});
+
+window.addEventListener('popstate', (event) => {
+    const pageId = event.state?.page || 'home';
+    navigate(pageId, true, false);
 });
 
 // SPA 탭 화면 전환 함수
-function navigate(pageId, skipScroll = false) {
+function navigate(pageId, skipScroll = false, push = true) {
     document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
 
     if (pageId === 'admin-login') {
@@ -38,8 +48,12 @@ function navigate(pageId, skipScroll = false) {
     }
 
     document.getElementById('nav-links').classList.remove('show');
-    if (!skipScroll) {
-        window.scrollTo(0, 0);
+
+    if (!skipScroll) window.scrollTo(0, 0);
+
+    // ✅ 히스토리 추가
+    if (push) {
+        history.pushState({ page: pageId }, '', `#${pageId}`);
     }
 }
 
@@ -95,7 +109,7 @@ function renderFirstPreview() {
     const previewSection = document.getElementById('first-preview');
     if (!previewSection) return;
     const firstEp = episodes.find(ep => ep.id === 1) || episodes[0];
-
+    
     if (firstEp && firstEp.visible) {
         previewSection.innerHTML = `
             <h2 style="font-size: 1.1rem; color: var(--text-light); letter-spacing: 0.15em; margin-bottom: 2rem; font-weight: 600;">1화 미리보기</h2>
@@ -113,20 +127,20 @@ function renderFirstPreview() {
 function readEpisode(id, fromPreview = false) {
     const ep = episodes.find(e => e.id === id);
     if (!ep) return;
-
+    
     ep.views = (ep.views || 0) + 1;
     saveData();
-
+    
     document.getElementById('read-title').innerText = `${ep.id}화. ${ep.title}`;
     document.getElementById('read-date').innerText = ep.date;
     document.getElementById('read-content').innerText = ep.content;
-
+    
     currentReadingId = id;
-
+    
     const visibleEpisodes = episodes.filter(e => e.visible);
     const currentIndex = visibleEpisodes.findIndex(e => e.id === id);
     const nextBtn = document.getElementById('btn-next-ep');
-
+    
     if (currentIndex !== -1 && currentIndex < visibleEpisodes.length - 1) {
         const nextId = visibleEpisodes[currentIndex + 1].id;
         nextBtn.style.display = 'inline-block';
@@ -144,7 +158,7 @@ function readEpisode(id, fromPreview = false) {
             const lineHeight = 1.8;
             const offsetHeight = 30 * fontSize * lineHeight;
             const targetPosition = readContent.offsetTop + offsetHeight - 90;
-
+            
             window.scrollTo({
                 top: targetPosition,
                 behavior: 'smooth'
@@ -198,9 +212,6 @@ function renderAdminEpisodes(page = 1) {
     }
 
     paginated.forEach(ep => {
-        const div = document.createElement('div');
-        div.className = 'admin-ep-item';
-
     const div = document.createElement('div');
     div.className = 'admin-ep-item';
 
@@ -265,7 +276,7 @@ function editEpisode(id) {
         document.getElementById('ep-title').value = ep.title;
         document.getElementById('ep-summary').value = ep.summary;
         document.getElementById('ep-content').value = ep.content;
-
+        
         document.getElementById('upload-title').innerText = '회차 수정';
         document.getElementById('btn-save').innerText = '수정 완료';
         window.scrollTo(0, 0);
@@ -277,10 +288,10 @@ function saveEpisode() {
     const editId = document.getElementById('edit-id').value;
     let title = document.getElementById('ep-title').value.trim();
     title = title.replace(/^\d+화[\s.]*/, '').trim();
-
+    
     const summary = document.getElementById('ep-summary').value.trim();
     const content = document.getElementById('ep-content').value.trim();
-
+    
     if (!title || !content) {
         alert('제목과 내용을 모두 입력해주세요.');
         return;
@@ -295,7 +306,7 @@ function saveEpisode() {
         const newId = episodes.length > 0 ? Math.max(...episodes.map(e => e.id)) + 1 : 1;
         const today = new Date();
         const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
-
+        
         episodes.push({
             id: newId,
             title: title,
@@ -310,14 +321,14 @@ function saveEpisode() {
     saveData();
     renderAdminEpisodes();
     renderEpisodes();
-
+    
     document.getElementById('edit-id').value = '';
     document.getElementById('ep-title').value = '';
     document.getElementById('ep-summary').value = '';
     document.getElementById('ep-content').value = '';
     document.getElementById('upload-title').innerText = '회차 업로드';
     document.getElementById('btn-save').innerText = '업로드';
-
+    
     alert('저장되었습니다.');
 }
 
@@ -325,7 +336,7 @@ function saveEpisode() {
 function updateStats() {
     const totalViews = episodes.reduce((sum, ep) => sum + (ep.views || 0), 0);
     const count = episodes.length;
-
+    
     let maxTitle = '-';
     if (count > 0) {
         const maxEp = episodes.reduce((prev, current) => (prev.views > current.views) ? prev : current);
