@@ -132,5 +132,7 @@ hr {
 .character-description {
     line-height: 1.8;
     font-family: 'Nanum Myeongjo', serif;
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    display: -webkit-box; -webkit-line-clamp: 3;
 }
 /* 나중에 일러스트나 설정집 카드 등을 추가하실 때 이 파일에 스타일을 채워 넣으시면 편리합니다! */
