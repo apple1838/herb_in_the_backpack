@@ -10,6 +10,13 @@
     padding: 4rem 2rem;
 }
 
+hr {
+    border: none;
+    height: 1px;
+    background: var(--border-color);
+    margin: 2rem 0;
+}
+
 .character-card {
     display: flex;
     gap: 3rem;
