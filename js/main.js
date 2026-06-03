@@ -19,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const hash = location.hash.replace('#', '');
     const initialPage = hash || 'home';
 
+    // 초기 상태는 replaceState로 넣어야 안정적
+    history.replaceState({ page: initialPage }, '', `#${initialPage}`);
+
     navigate(initialPage, true, false);
 
     saveData();
@@ -51,12 +54,11 @@ function navigate(pageId, skipScroll = false, push = true) {
 
     if (!skipScroll) window.scrollTo(0, 0);
 
-    // ✅ 히스토리 추가
+    // 핵심: replaceState / pushState 구분
     if (push) {
         history.pushState({ page: pageId }, '', `#${pageId}`);
     }
 }
-
 // 모바일 토글 메뉴
 function toggleMenu() {
     document.getElementById('nav-links').classList.toggle('show');
