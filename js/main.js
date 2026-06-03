@@ -179,10 +179,23 @@ function renderAdminEpisodes(page = 1) {
 
     list.innerHTML = '';
 
-    const start = (page - 1) * adminItemsPerPage;
-    const end = start + adminItemsPerPage;
+    console.log("episodes:", episodes);
+    console.log("page:", page);
+
+    const itemsPerPage = 10;
+
+    const start = Math.max(0, (page - 1) * itemsPerPage);
+    const end = start + itemsPerPage;
 
     const paginated = episodes.slice(start, end);
+
+    console.log("start:", start, "end:", end);
+    console.log("paginated:", paginated);
+
+    if (paginated.length === 0 && episodes.length > 0) {
+        console.warn("pagination mismatch → resetting page to 1");
+        return renderAdminEpisodes(1);
+    }
 
     paginated.forEach(ep => {
         const div = document.createElement('div');
@@ -193,15 +206,9 @@ function renderAdminEpisodes(page = 1) {
             <div class="ep-views">조회수: ${ep.views || 0}</div>
             <div class="ep-date">${ep.date}</div>
             <div class="ep-actions">
-                <button onclick="toggleVisibility(${ep.id})">
-                    <i class="fa-regular ${ep.visible ? 'fa-eye' : 'fa-eye-slash'}"></i>
-                </button>
-                <button onclick="editEpisode(${ep.id})">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button onclick="deleteEpisode(${ep.id})">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
+                <button onclick="toggleVisibility(${ep.id})">👁</button>
+                <button onclick="editEpisode(${ep.id})">✏️</button>
+                <button onclick="deleteEpisode(${ep.id})">🗑</button>
             </div>
         `;
         list.appendChild(div);
