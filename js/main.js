@@ -173,34 +173,41 @@ function logout() {
 }
 
 // 관리자 화면 내 등록된 회차 목록 출력 (수정된 코드)
-function renderAdminEpisodes() {
+function renderAdminEpisodes(page = 1) {
     const list = document.getElementById('admin-ep-list');
     if (!list) return;
+
     list.innerHTML = '';
-    
-    episodes.forEach(ep => {
+
+    const start = (page - 1) * adminItemsPerPage;
+    const end = start + adminItemsPerPage;
+
+    const paginated = episodes.slice(start, end);
+
+    paginated.forEach(ep => {
         const div = document.createElement('div');
         div.className = 'admin-ep-item';
-        
-        // CSS Grid와 연결되는 클래스 구조로 변경
+
         div.innerHTML = `
             <div class="ep-title">${ep.id}화. ${ep.title}</div>
             <div class="ep-views">조회수: ${ep.views || 0}</div>
             <div class="ep-date">${ep.date}</div>
             <div class="ep-actions">
-                <button title="공개/비공개 전환" onclick="toggleVisibility(${ep.id})">
+                <button onclick="toggleVisibility(${ep.id})">
                     <i class="fa-regular ${ep.visible ? 'fa-eye' : 'fa-eye-slash'}"></i>
                 </button>
-                <button title="수정" onclick="editEpisode(${ep.id})">
+                <button onclick="editEpisode(${ep.id})">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </button>
-                <button title="삭제" onclick="deleteEpisode(${ep.id})">
+                <button onclick="deleteEpisode(${ep.id})">
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </div>
         `;
         list.appendChild(div);
     });
+
+    renderAdminPagination();
 }
 // 공개 여부 변경 토글
 function toggleVisibility(id) {
